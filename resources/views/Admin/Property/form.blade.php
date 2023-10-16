@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>@yield('title')</h1>
-    <form action="{{ $property->id ? route('admin.property.update', $property) : route('admin.property.store')}}" method="post" class="vstack gap-2">
+    <form action="{{ $property->id ? route('admin.property.update', $property) : route('admin.property.store')}}" method="post" class="vstack gap-2" enctype="multipart/form-data">
     @method($property->id ? "put" : "post")
     @csrf
     <div class="row">
@@ -27,6 +27,8 @@
     </div>
         @include('shared.input', ['inputForm' => 'checkbox', 'name' => 'sold', 'label' => 'Code postal', 'class' => 'form-control', 'value' => $property->sold])
         @include('shared.input', ['inputForm' => 'select', 'name' => 'options', 'label' => 'Options', 'class' => 'form-control', 'value' => $options])
+        @include('shared.input', ['type' => 'file', 'name' => 'image', 'label' => 'Image', 'class' => 'form-control'])
+
     <div>
         <button type="submit" class="btn btn-primary">
             @if ($property->id)

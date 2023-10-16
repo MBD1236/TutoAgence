@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Property extends Model
@@ -22,7 +23,8 @@ class Property extends Model
         'city',
         'address',
         'postal_code',
-        'sold'
+        'sold',
+        'image'
     ];
 
     public function options() {
@@ -32,5 +34,8 @@ class Property extends Model
     public function getSlug() : string {
         return Str::slug($this->title);
 
+    }
+    public function imageUrl(): string {
+        return Storage::url($this->image);
     }
 }

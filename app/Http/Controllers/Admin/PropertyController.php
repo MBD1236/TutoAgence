@@ -8,6 +8,7 @@ use App\Http\Requests\FormPostRequest;
 use App\Models\Option;
 use App\Models\Property;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyController extends Controller
 {
@@ -39,7 +40,15 @@ class PropertyController extends Controller
      */
     public function store(FormPropertyRequest $request)
     {
-        Property::create($request->validated());
+        $data = $request->validated();
+        /** @var UploadedFile|null $image */
+        $image = $data['image'];
+        if ($image !== null && !$image->getError()) {
+            $data['image'] = $image->store('property', 'public');
+        }
+        $property = Property::create($data);
+        $property->options()->sync($data['options']);
+
         return to_route('admin.property.index')->with("success", "Ajout effectué avec succès");
     }
 
@@ -61,7 +70,16 @@ class PropertyController extends Controller
      */
     public function update(FormPropertyRequest $request, Property $property)
     {
-        $property->update($request->validated());
+        $data = $request->validated();
+        /** @var UploadedFile|null $image */
+        $image = $data['image'];
+        if ($image !== null && !$image->getError()) {
+            if ($property->image) {
+                Storage::disk('public')->delete($property->image);
+            }
+            $data['image'] = $image->store('property', 'public');
+        }
+        $property->update($data);
         $property->options()->sync($request->validated('options'));
         return to_route('admin.property.index')->with("success", "Modification effectuée avec succès");
     }
@@ -71,6 +89,9 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
+        if($property->image) {
+            Storage::disk('public')->delete($property->image);
+        }
         $property->delete();
         return to_route('admin.property.index')->with("success", "Suppression effectuée avec succès");
     }
