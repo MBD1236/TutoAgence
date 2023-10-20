@@ -3,6 +3,11 @@
 
 @section('content')
         <div class="container">
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success')}}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-8 pt-3">
                     @if ($property->image)
@@ -12,9 +17,9 @@
                 <div class="col-4">
                     <h1>{{ $property->title}}</h1>
                     <span class="badge bg-primary">Disponible : {{ $property->sold ? 'Oui' : 'Non'}}</span>
-                    <h2>{{ $property->rooms}} pièces - {{ $property->surface}} m²</h2>
+                    <h2>{{ $property->rooms }} pièces - {{ $property->surface }} m²</h2>
 
-                    <div class="text-primary fw-bold" style="font-size: 4rem;">
+                    <div class="text-primary fw-bold" style="font-size: 3rem;">
                         {{ number_format($property->price, thousands_separator: ' ')}} GNF
                     </div>
 
@@ -23,14 +28,14 @@
                     <div class="mt-4">
                         <h4>Intéressé par ce bien ?</h4>
 
-                        <form action="" method="post" class="vstack gap-2">
+                        <form action="{{ route('property.contact', $property)}}" method="post" class="vstack gap-2">
                                 @csrf
                                 <div class="row">
                                     @include('shared.input', ['class' => 'form-control', 'name' => 'firstname', 'label' => 'Prénom'])
                                     @include('shared.input', ['class' => 'form-control', 'name' => 'lastname', 'label' => 'Nom'])
                                 </div>
                                 <div class="row">
-                                    @include('shared.input', ['type' => 'phone', 'class' => 'form-control', 'name' => 'phone', 'label' => 'Téléphone'])
+                                    @include('shared.input', ['class' => 'form-control', 'name' => 'phone', 'label' => 'Téléphone'])
                                     @include('shared.input', ['type' =>'email', 'class' => 'form-control', 'name' => 'email', 'label' => 'Email'])
                                 </div>
                                 @include('shared.input', ['type' =>'textarea', 'class' => 'form-control', 'name' => 'message', 'label' => 'Votre message'])

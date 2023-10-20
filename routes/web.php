@@ -29,6 +29,10 @@ Route::prefix('/property')->name('property.')->controller(HomePropertyController
     ])->name('show');
 });
 
+Route::post('/property/{property}/contact', [HomePropertyController::class, 'contact'])->where([
+    'property' => '[0-9]+'
+])->name('property.contact');
+
 
 Route::prefix('admin')->name('admin.')->group(function() {
     Route::resource('property', PropertyController::class)->except(['show']);

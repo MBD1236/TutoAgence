@@ -42,7 +42,7 @@ class PropertyController extends Controller
     {
         $data = $request->validated();
         /** @var UploadedFile|null $image */
-        $image = $data['image'];
+        $image = $request->validated('image');
         if ($image !== null && !$image->getError()) {
             $data['image'] = $image->store('property', 'public');
         }
@@ -72,7 +72,7 @@ class PropertyController extends Controller
     {
         $data = $request->validated();
         /** @var UploadedFile|null $image */
-        $image = $data['image'];
+        $image = $request->validated('image');
         if ($image !== null && !$image->getError()) {
             if ($property->image) {
                 Storage::disk('public')->delete($property->image);
