@@ -19,6 +19,20 @@
                 <a class="nav-link" href="{{ route('admin.option.index')}}">Gérer les options</a>
             </div>
         </div>
+
+        <div class="ms-auto">
+            @auth
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <form action="{{ route('logout')}}" method="post">
+                            @csrf
+                            @method('delete')
+                            <button class="nav-link">Se déconnecter</button>
+                        </form>
+                    </li>
+                </ul>
+            @endauth
+        </div>
     </div>
 </nav>
 <div class="container">

@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HomePropertyController;
+use App\Http\Controllers\RegisterController;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Route;
 use PhpParser\Builder\Property;
 
@@ -20,6 +23,13 @@ use PhpParser\Builder\Property;
 
 Route::get('/', [HomeController::class, 'index'] );
 
+Route::get('/add/user', [RegisterController::class, 'formUser'])->name('formUser');
+Route::post('/add/user', [RegisterController::class, 'addUser'])->name('addUser');
+
+Route::get('/login', [AuthController::class, 'login'])->middleware('guest')->name('login');
+Route::post('/login', [AuthController::class, 'doLogin']);
+Route::delete('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
 
 Route::prefix('/property')->name('property.')->controller(HomePropertyController::class)->group( function() {
     Route::get('/', 'index')->name('index');
@@ -34,7 +44,7 @@ Route::post('/property/{property}/contact', [HomePropertyController::class, 'con
 ])->name('property.contact');
 
 
-Route::prefix('admin')->name('admin.')->group(function() {
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
     Route::resource('property', PropertyController::class)->except(['show']);
     Route::resource('option', OptionController::class)->except(['show']);
 });

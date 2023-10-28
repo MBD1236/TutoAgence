@@ -16,7 +16,7 @@
     <div class="container">
         <div class="row">
             @forelse ($properties as $property)
-                <div class="col-3">
+                <div class="col-md-6 col-lg-3">
                     @include('property.card')
                 </div>
             @empty

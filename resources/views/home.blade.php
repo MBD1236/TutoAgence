@@ -18,7 +18,7 @@
         <h2>Last properties</h2>
         <div class="row">
             @foreach ($properties as $property)
-            <div class="col">
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-2">
                 @include('property.card')
             </div>
             @endforeach
